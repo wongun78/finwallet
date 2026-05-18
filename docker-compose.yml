@@ -1,0 +1,110 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: finwallet-postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: finwallet-rabbitmq
+    env_file:
+      - .env
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  redis:
+    image: redis:7-alpine
+    container_name: finwallet-redis
+    ports:
+      - "6379:6379"
+
+  minio:
+    image: minio/minio
+    container_name: finwallet-minio
+    command: server /data --console-address ":9001"
+    env_file:
+      - .env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+
+  seq:
+    image: datalust/seq:2024.3
+    container_name: finwallet-seq
+    environment:
+      ACCEPT_EULA: "Y"
+    ports:
+      - "5341:5341"
+      - "8081:80"
+
+  api:
+    build:
+      context: .
+      dockerfile: src/FinWallet.Api/Dockerfile
+    container_name: finwallet-api
+    env_file:
+      - .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ConnectionStrings__Database: ${DB_CONNECTION_STRING}
+      Redis__ConnectionString: ${REDIS_CONNECTION_STRING}
+      RabbitMq__Host: ${RABBITMQ_HOST}
+      RabbitMq__Username: ${RABBITMQ_USERNAME}
+      RabbitMq__Password: ${RABBITMQ_PASSWORD}
+      RabbitMq__VirtualHost: ${RABBITMQ_VHOST}
+      Minio__Endpoint: ${MINIO_ENDPOINT}
+      Minio__AccessKey: ${MINIO_ACCESS_KEY}
+      Minio__SecretKey: ${MINIO_SECRET_KEY}
+      Minio__Bucket: ${MINIO_BUCKET}
+      Minio__UseSsl: ${MINIO_USE_SSL}
+      Minio__PublicEndpoint: ${MINIO_PUBLIC_ENDPOINT}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      Jwt__Key: ${JWT_KEY}
+      Jwt__ExpiryMinutes: ${JWT_EXPIRY_MINUTES}
+      RefreshToken__Days: ${REFRESH_TOKEN_DAYS}
+      RateLimiting__Enabled: ${RATE_LIMIT_ENABLED}
+      RateLimiting__RequestsPerMinute: ${RATE_LIMIT_RPM}
+      MassTransit__UseInMemoryBus: "false"
+      Database__ApplyMigrations: ${DB_APPLY_MIGRATIONS}
+      Seed__Enabled: ${SEED_ENABLED}
+      Seed__AdminEmail: ${SEED_ADMIN_EMAIL}
+      Seed__AdminPassword: ${SEED_ADMIN_PASSWORD}
+      Seed__SeedWallet: ${SEED_WALLET}
+      Seq__ServerUrl: ${SEQ_SERVER_URL}
+      Webhook__Enabled: ${WEBHOOK_ENABLED}
+      Webhook__Endpoint: ${WEBHOOK_ENDPOINT}
+      Webhook__Secret: ${WEBHOOK_SECRET}
+      Cors__AllowedOrigins: ${CORS_ALLOWED_ORIGINS}
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+      - minio
+      - seq
+    ports:
+      - "5000:8080"
+
+volumes:
+  postgres-data:
+  minio-data:

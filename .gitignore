@@ -1,0 +1,16 @@
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.db
+*.log
+TestResults/
+node_modules/
+.env
+ui/finwallet-admin/node_modules/
+ui/finwallet-admin/dist/
+secrets.json
+*.lscache
+.DS_Store
