@@ -1,0 +1,36 @@
+<div class="max-w-xl mx-auto glass shadow-soft rounded-3xl p-8 fade-in">
+  <h2 class="text-2xl font-semibold mb-2">Cau hinh TOTP</h2>
+  <p class="text-slate/80 mb-6">Quet QR trong Google Authenticator hoac nhap secret.</p>
+
+  <div class="bg-white/70 rounded-2xl p-4 border border-mist mb-4">
+    <div class="text-sm text-slate/70">Secret</div>
+    <div class="text-lg font-semibold tracking-wider">{{ secret }}</div>
+    <a *ngIf="otpAuthUri" [href]="otpAuthUri" class="text-sm text-sky hover:underline">Mo otpauth uri</a>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="confirm()" class="space-y-4">
+    <div>
+      <label class="text-sm font-medium">Nhap ma TOTP</label>
+      <input
+        type="text"
+        formControlName="code"
+        class="mt-1 w-full rounded-xl border border-mist bg-white/70 px-4 py-2"
+      />
+    </div>
+
+    <div *ngIf="message" class="text-sm text-emerald-600">{{ message }}</div>
+
+    <button
+      type="submit"
+      [disabled]="isConfirming || form.invalid"
+      class="rounded-xl bg-ink text-white px-5 py-2 font-medium hover:bg-slate transition flex items-center gap-2"
+    >
+      <mat-progress-spinner
+        *ngIf="isConfirming"
+        diameter="16"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+      <span>{{ isConfirming ? 'Dang xu ly...' : 'Xac nhan' }}</span>
+    </button>
+  </form>
+</div>

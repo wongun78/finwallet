@@ -1,0 +1,52 @@
+<div class="max-w-md mx-auto mt-12 glass shadow-soft rounded-3xl p-8 fade-in">
+  <h1 class="text-3xl font-semibold mb-2">Dang nhap</h1>
+  <p class="text-slate/80 mb-6">Quan tri FinWallet voi bao mat TOTP.</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+    <div>
+      <label class="text-sm font-medium">Email</label>
+      <input
+        type="email"
+        formControlName="email"
+        class="mt-1 w-full rounded-xl border border-mist bg-white/70 px-4 py-2"
+        placeholder="admin@finwallet.local"
+      />
+    </div>
+
+    <div>
+      <label class="text-sm font-medium">Mat khau</label>
+      <input
+        type="password"
+        formControlName="password"
+        class="mt-1 w-full rounded-xl border border-mist bg-white/70 px-4 py-2"
+      />
+    </div>
+
+    <div *ngIf="requiresTotp">
+      <label class="text-sm font-medium">Ma TOTP</label>
+      <input
+        type="text"
+        formControlName="totpCode"
+        class="mt-1 w-full rounded-xl border border-mist bg-white/70 px-4 py-2"
+        placeholder="123456"
+      />
+    </div>
+
+    <div *ngIf="errorMessage" class="text-sm text-red-600">{{ errorMessage }}</div>
+
+    <button
+      type="submit"
+      [disabled]="isLoading || form.invalid"
+      class="w-full rounded-xl bg-ink text-white py-2.5 font-medium hover:bg-slate transition flex items-center justify-center gap-2"
+    >
+      <mat-progress-spinner
+        *ngIf="isLoading"
+        diameter="16"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+      <span>{{ isLoading ? 'Dang xu ly...' : 'Dang nhap' }}</span>
+    </button>
+
+    <a routerLink="/totp" class="text-sm text-sky hover:underline">Cau hinh TOTP sau khi dang nhap</a>
+  </form>
+</div>

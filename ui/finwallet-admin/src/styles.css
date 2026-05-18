@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-ink: #0f172a;
+  --bg-slate: #1f2937;
+  --bg-mist: #e2e8f0;
+  --bg-sky: #0ea5e9;
+  --bg-mint: #22c55e;
+  --bg-gold: #f59e0b;
+  --bg-rose: #fef3c7;
+  --bg-fog: #f8fafc;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--bg-ink);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.18) 0%, transparent 40%),
+    radial-gradient(circle at 80% 5%, rgba(34, 197, 94, 0.16) 0%, transparent 38%),
+    radial-gradient(circle at 70% 70%, rgba(245, 158, 11, 0.16) 0%, transparent 42%),
+    linear-gradient(160deg, var(--bg-fog), #eef2ff);
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(0px);
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+  animation: float 14s ease-in-out infinite;
+}
+
+.bg-orb--one {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle at 30% 30%, rgba(14, 165, 233, 0.6), transparent 60%);
+  top: -120px;
+  right: 10%;
+}
+
+.bg-orb--two {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle at 40% 40%, rgba(34, 197, 94, 0.55), transparent 65%);
+  bottom: -160px;
+  left: 8%;
+  animation-delay: -5s;
+}
+
+.bg-orb--three {
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.55), transparent 70%);
+  top: 30%;
+  left: 45%;
+  animation-delay: -9s;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out both;
+}
+
+.stagger > * {
+  animation: riseUp 0.6s ease-out both;
+}
+
+.stagger > *:nth-child(1) {
+  animation-delay: 0.04s;
+}
+
+.stagger > *:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.stagger > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.stagger > *:nth-child(4) {
+  animation-delay: 0.16s;
+}
+
+.stagger > *:nth-child(5) {
+  animation-delay: 0.2s;
+}
+
+.stagger > *:nth-child(6) {
+  animation-delay: 0.24s;
+}
+
+.toast {
+  animation: toastIn 0.4s ease-out both;
+}
+
+.toast-success {
+  background: var(--bg-ink);
+  color: #fff;
+}
+
+.toast-error {
+  background: #dc2626;
+  color: #fff;
+}
+
+.toast-info {
+  background: #0284c7;
+  color: #fff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes riseUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 14px, 0);
+  }
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
